@@ -100,9 +100,14 @@ void buildRoad(osg::Group* pRoadGroup)
 	addRoadTile("roadStraight", "tile2", 1, 1, 90.0f, pRoadGroup);
 	addRoadTile("roadCurve", "tile3", 1, 2, 180.0f, pRoadGroup);
 	addRoadTile("roadStraight", "tile4", 0, 2, 0.0f, pRoadGroup);
-	addRoadTile("roadCurve", "tile5", -1, 2, -90.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile6", -1, 1, -90.0f, pRoadGroup);
-	addRoadTile("roadCurve", "tile7", -1, 0, 0.0f, pRoadGroup);
+	addRoadTile("roadTJunction", "tile5", -1, 2, 90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "tile6", -2, 2, 0.0f, pRoadGroup);
+	addRoadTile("roadCurve", "tile7", -3, 2, -90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "tile8", -3, 1, 90.0f, pRoadGroup);
+	addRoadTile("roadCurve", "tile9", -3, 0, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "tile10", -2, 0, 0.0f, pRoadGroup);
+	addRoadTile("roadTJunction", "tile11", -1, 0, -90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "tile12", -1, 1, 90.0f, pRoadGroup);
 }
 
 void createCarOne(osg::Group* pRoadGroup)
@@ -159,7 +164,7 @@ int main(int argc, char** argv)
 	buildRoad(pRoadGroup);
 
 	// Add car one
-	createCarOne(pRoadGroup);
+	// createCarOne(pRoadGroup);
 
 
 	// osg setup stuff
