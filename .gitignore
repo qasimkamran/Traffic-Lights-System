@@ -1,13 +1,13 @@
-include/OpenThreads/Config
-include/OpenThreads/Version
-include/osg/Config
-include/osg/GL
-include/osg/Version
-include/osgQt/Version
+osg-3.6.4-VC2017-x64/include/OpenThreads/Config
+osg-3.6.4-VC2017-x64/include/OpenThreads/Version
+osg-3.6.4-VC2017-x64/include/osg/Config
+osg-3.6.4-VC2017-x64/include/osg/GL
+osg-3.6.4-VC2017-x64/include/osg/Version
+osg-3.6.4-VC2017-x64/include/osgQt/Version
 src/osgQt/__
 
-lib/
-bin/
+osg-3.6.4-VC2017-x64/lib/
+osg-3.6.4-VC2017-x64/bin/
 
 *.pc
 *.conf
