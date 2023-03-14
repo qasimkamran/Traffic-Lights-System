@@ -95,19 +95,39 @@ osg::AnimationPath* createAnimationPath(raaAnimationPointFinders apfs, osg::Grou
 
 void buildRoad(osg::Group* pRoadGroup)
 {
-	addRoadTile("roadStraight", "tile0", 0, 0, 0.0f, pRoadGroup);
 	addRoadTile("roadCurve", "tile1", 1, 0, 90.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile2", 1, 1, 90.0f, pRoadGroup);
-	addRoadTile("roadCurve", "tile3", 1, 2, 180.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile4", 0, 2, 0.0f, pRoadGroup);
-	addRoadTile("roadTJunction", "tile5", -1, 2, 90.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile6", -2, 2, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile1.1", 1, 1, 90.0f, pRoadGroup);
+	
+	addRoadTile("roadXJunction", "tile2", 1, 2, 180.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile2.1", 0, 2, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile2.2", 1, 3, -90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile2.3", 2, 2, 0.0f, pRoadGroup);
+	
+	addRoadTile("roadCurve", "tile3", 3, 2, 90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile3.1", 3, 3, 90.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile4", 3, 4, 180.0f, pRoadGroup);
+
+	addRoadTile("roadTJunction", "tile5", 1, 4, 90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile5.1", 0, 4, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile5.2", 2, 4, 0.0f, pRoadGroup);
+	
+	addRoadTile("roadXJunction", "tile6", -1, 2, 90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile6.1", -2, 2, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile6.2", 0, 2, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile6.3", -1, 3, -90.0f, pRoadGroup);
+	
 	addRoadTile("roadCurve", "tile7", -3, 2, -90.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile8", -3, 1, 90.0f, pRoadGroup);
-	addRoadTile("roadCurve", "tile9", -3, 0, 0.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile10", -2, 0, 0.0f, pRoadGroup);
-	addRoadTile("roadTJunction", "tile11", -1, 0, -90.0f, pRoadGroup);
-	addRoadTile("roadStraight", "tile12", -1, 1, 90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile7.1", -3, 1, 90.0f, pRoadGroup);
+	
+	addRoadTile("roadCurve", "tile8", -3, 0, 0.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile8.1", -2, 0, 0.0f, pRoadGroup);
+	
+	addRoadTile("roadCurve", "tile9", -1, 4, -90.0f, pRoadGroup);
+
+	addRoadTile("roadTJunction", "tile10", -1, 0, -90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile10.1", -1, 1, 90.0f, pRoadGroup);
+		addRoadTile("roadStraight", "tile10.2", 0, 0, 0.0f, pRoadGroup);
 }
 
 void createCarOne(osg::Group* pRoadGroup)
