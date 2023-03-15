@@ -20,6 +20,7 @@
 #include "raaAnimationPointFinder.h"
 #include "raaAnimatedFacarde.h"
 #include "raaCarFacarde.h"
+#include "TrafficLightFacarde.h"
 #include "raaTrafficSystem.h"
 
 
@@ -39,6 +40,12 @@ void addRoadTile(std::string sAssetName, std::string sPartName, int xUnit, int y
 {
 	raaFacarde* pFacarde = new raaRoadTileFacarde(raaAssetLibrary::getNamedAsset(sAssetName, sPartName), osg::Vec3(g_fTileSize * xUnit, g_fTileSize * yUnit, 0.0f), fRot);
 	pParent->addChild(pFacarde->root());
+}
+
+void addTrafficLight(std::string sPartName, osg::Vec3 vTrans, float fRot, float fScale, osg::Group* pParent)
+{
+	TrafficLightFacarde* tlFacarde = new TrafficLightFacarde(raaAssetLibrary::getClonedAsset("trafficLight", sPartName), vTrans, fRot, fScale);
+	pParent->addChild(tlFacarde->root());
 }
 
 osg::Node* buildAnimatedVehicleAsset()
@@ -130,6 +137,18 @@ void buildRoad(osg::Group* pRoadGroup)
 		addRoadTile("roadStraight", "tile10.2", 0, 0, 0.0f, pRoadGroup);
 }
 
+void buildTrafficLights(osg::Group* pTrafficLightGroup)
+{
+	addTrafficLight("light1", osg::Vec3(-240, -170, 0), 90, 0.05, pTrafficLightGroup);
+	addTrafficLight("light2", osg::Vec3(-290, +230, 0), 180, 0.05, pTrafficLightGroup);
+	addTrafficLight("light3", osg::Vec3(-710, +180, 0), -90, 0.05, pTrafficLightGroup);
+
+	addTrafficLight("light4", osg::Vec3(290, +710, 0), 0, 0.05, pTrafficLightGroup);
+	addTrafficLight("light5", osg::Vec3(710, +760, 0), 90, 0.05, pTrafficLightGroup);
+	addTrafficLight("light6", osg::Vec3(240, +1130, 0), -90, 0.05, pTrafficLightGroup);
+	addTrafficLight("light7", osg::Vec3(650, +1190, 0), 180, 0.05, pTrafficLightGroup);
+}
+
 void createCarOne(osg::Group* pRoadGroup)
 {
 	raaAnimationPointFinders apfs;
@@ -180,8 +199,15 @@ int main(int argc, char** argv)
 	osg::Group* pRoadGroup = new osg::Group();
 	g_pRoot->addChild(pRoadGroup);
 
+	// add a group node to the scene to hold the traffic lights
+	osg::Group* pTrafficLightGroup = new osg::Group();
+	g_pRoot->addChild(pTrafficLightGroup);
+
 	// Create road
 	buildRoad(pRoadGroup);
+
+	// Create traffic lights
+	buildTrafficLights(pTrafficLightGroup);
 
 	// Add car one
 	// createCarOne(pRoadGroup);
