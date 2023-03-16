@@ -3,6 +3,7 @@
 // note: this is a templated class so implemented in the header file
 #include <windows.h>
 #include <osg/NodeVisitor>
+#include <iostream>
 
 // a generic finder implmentation for you to use
 

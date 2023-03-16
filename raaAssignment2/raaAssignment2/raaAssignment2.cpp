@@ -11,6 +11,7 @@
 #include <osg/AnimationPath>
 #include <osg/Matrix>
 #include <osg/Material>
+#include <osg/NodeVisitor>
 #include <osg/ShapeDrawable>
 #include "raaInputController.h"
 #include "raaAssetLibrary.h"
@@ -20,6 +21,7 @@
 #include "raaAnimationPointFinder.h"
 #include "raaAnimatedFacarde.h"
 #include "raaCarFacarde.h"
+#include "raaFinder.h"
 #include "TrafficLightFacarde.h"
 #include "TrafficLightControl.h"
 #include "raaTrafficSystem.h"
@@ -37,10 +39,11 @@ enum raaRoadTileType
 	LitXJunction,
 };
 
-void addRoadTile(std::string sAssetName, std::string sPartName, int xUnit, int yUnit, float fRot, osg::Group* pParent)
+raaFacarde* addRoadTile(std::string sAssetName, std::string sPartName, int xUnit, int yUnit, float fRot, osg::Group* pParent)
 {
 	raaFacarde* pFacarde = new raaRoadTileFacarde(raaAssetLibrary::getNamedAsset(sAssetName, sPartName), osg::Vec3(g_fTileSize * xUnit, g_fTileSize * yUnit, 0.0f), fRot);
 	pParent->addChild(pFacarde->root());
+	return pFacarde;
 }
 
 TrafficLightControl* addTrafficLightControlTile(std::string sAssetName, std::string sPartName, int xUnit, int yUnit, float fRot, float fScale, osg::Group* pParent)
@@ -107,98 +110,117 @@ osg::AnimationPath* createAnimationPath(raaAnimationPointFinders apfs, osg::Grou
 	return ap;
 }
 
-void buildRoad(osg::Group* pRoadGroup)
+void addNodeChild(osg::Node* node1, osg::Node* node2, osg::Group* pGroup)
 {
-	addRoadTile("roadCurve", "tile1", 1, 0, 90.0f, pRoadGroup);
-	
-	addRoadTile("roadXJunction", "tlJunc1", 1, 2, 180.0f, pRoadGroup);
-	
-	addRoadTile("roadCurve", "tile2", 3, 2, 90.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile2.1", 3, 3, 90.0f, pRoadGroup);
-
-	addRoadTile("roadCurve", "tile3", 3, 4, 180.0f, pRoadGroup);
-
-	addRoadTile("roadTJunction", "tile4", 1, 4, 90.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile4.1", 0, 4, 0.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile4.2", 2, 4, 0.0f, pRoadGroup);
-	
-	addRoadTile("roadXJunction", "tile5", -1, 2, 90.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile5.1", -2, 2, 0.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile5.2", 0, 2, 0.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile5.3", -1, 3, -90.0f, pRoadGroup);
-	
-	addRoadTile("roadCurve", "tile6", -3, 2, -90.0f, pRoadGroup);
-		addRoadTile("roadStraight", "tile6.1", -3, 1, 90.0f, pRoadGroup);
-	
-	addRoadTile("roadCurve", "tile7", -3, 0, 0.0f, pRoadGroup);
-	
-	addRoadTile("roadCurve", "tile8", -1, 4, -90.0f, pRoadGroup);
-
-	addRoadTile("roadTJunction", "tlJunc2", -1, 0, -90.0f, pRoadGroup);
+	osg::ref_ptr<osg::Group> group = dynamic_cast<osg::Group*>(node1);
+	if (group)
+	{
+		g_pRoot->addChild(pGroup);
+		group->addChild(node2);
+	}
+	else
+		printf("nullptr recieved");
 }
 
-void buildSpecialTJunction(std::string sIdentifier, osg::Group* pParent)
+osg::Node* buildSpecialTJunction(std::string sIdentifier, osg::Group* pParent, osg::Group* pChildren)
 {
-	std::string sTilePartName1 = sIdentifier + "Tile1";
+	std::string sTilePartName = sIdentifier + "Tile";
+
 	std::string sLightPartName1 = sIdentifier + "Light1";
-
-	TrafficLightControl* pSpecialTile1 = addTrafficLightControlTile("roadStraight", sTilePartName1, -1, 1, 90.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight1 = addTrafficLight(sLightPartName1, osg::Vec3(-290, +230, 0), 180, 0.08, pParent);
-	
-	pSpecialTile1->addTrafficLight(pTrafficLight1);	
-	
-	std::string sTilePartName2 = sIdentifier + "Tile2";
 	std::string sLightPartName2 = sIdentifier + "Light2";
-
-	TrafficLightControl* pSpecialTile2 = addTrafficLightControlTile("roadStraight", sTilePartName2, 0, 0, 0.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight2 = addTrafficLight(sLightPartName2, osg::Vec3(-240, -170, 0), 90, 0.08, pParent);
-
-	pSpecialTile2->addTrafficLight(pTrafficLight2);
-	
-	std::string sTilePartName3 = sIdentifier + "Tile3";
 	std::string sLightPartName3 = sIdentifier + "Light3";
 
-	TrafficLightControl* pSpecialTile3 = addTrafficLightControlTile("roadStraight", sTilePartName3, -2, 0, 0.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight3 = addTrafficLight(sLightPartName3, osg::Vec3(-710, +180, 0), -90, 0.08, pParent);
+	TrafficLightControl* pSpecialTile = addTrafficLightControlTile("roadTJunction", sTilePartName, -1, 0, -90.0f, 1.0f, pParent);
 
-	pSpecialTile3->addTrafficLight(pTrafficLight3);
+	TrafficLightFacarde* pTrafficLight1 = addTrafficLight(sLightPartName1, osg::Vec3(-290, +230, 0), 180, 0.08f, pChildren);
+	TrafficLightFacarde* pTrafficLight2 = addTrafficLight(sLightPartName2, osg::Vec3(-240, -170, 0), 90, 0.08f, pChildren);
+	TrafficLightFacarde* pTrafficLight3 = addTrafficLight(sLightPartName3, osg::Vec3(-710, +180, 0), -90, 0.08f, pChildren);
+
+	pSpecialTile->addTrafficLight(pTrafficLight1);
+	pSpecialTile->addTrafficLight(pTrafficLight2);
+	pSpecialTile->addTrafficLight(pTrafficLight3);
+
+	return pSpecialTile->root();
 }
 
-void buildSpecialXJunction(std::string sIdentifier, osg::Group* pParent)
+osg::Node* buildSpecialXJunction(std::string sIdentifier, osg::Group* pParent, osg::Group* pChildren)
 {
-	TrafficLightFacarde** trafficLights = new TrafficLightFacarde*[4];
+	std::string sTilePartName = sIdentifier + "Tile";
 
-	std::string sTilePartName1 = sIdentifier + "Tile1";
 	std::string sLightPartName1 = sIdentifier + "Light1";
-
-	TrafficLightControl* pSpecialTile1 = addTrafficLightControlTile("roadStraight", sTilePartName1, 0, 2, 0.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight1 = addTrafficLight(sLightPartName1, osg::Vec3(240, +1130, 0), -90, 0.08, pParent);
-
-	pSpecialTile1->addTrafficLight(pTrafficLight1);
-	
-	std::string sTilePartName2 = sIdentifier + "Tile2";
 	std::string sLightPartName2 = sIdentifier + "Light2";
-	
-	TrafficLightControl* pSpecialTile2 = addTrafficLightControlTile("roadStraight", sTilePartName2, 1, 3, -90.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight2 = addTrafficLight(sLightPartName2, osg::Vec3(650, +1190, 0), 180, 0.08, pParent);
-
-	pSpecialTile2->addTrafficLight(pTrafficLight2);
-	
-	std::string sTilePartName3 = sIdentifier + "Tile3";
 	std::string sLightPartName3 = sIdentifier + "Light3";
-	
-	TrafficLightControl* pSpecialTile3 = addTrafficLightControlTile("roadStraight", sTilePartName3, 2, 2, 0.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight3 = addTrafficLight(sLightPartName3, osg::Vec3(710, +760, 0), 90, 0.08, pParent);
-
-	pSpecialTile3->addTrafficLight(pTrafficLight3);
-	
-	std::string sTilePartName4 = sIdentifier + "Tile4";
 	std::string sLightPartName4 = sIdentifier + "Light4";
 
-	TrafficLightControl* pSpecialTile4 = addTrafficLightControlTile("roadStraight", sTilePartName4, 1, 1, 90.0f, 1.0f, pParent);
-	TrafficLightFacarde* pTrafficLight4 = addTrafficLight(sLightPartName4, osg::Vec3(290, +710, 0), 0, 0.08, pParent);
 
-	pSpecialTile4->addTrafficLight(pTrafficLight4);
+	TrafficLightControl* pSpecialTile = addTrafficLightControlTile("roadXJunction", sTilePartName, 1, 2, 180.0f, 1.0f, pParent);
+
+	TrafficLightFacarde* pTrafficLight1 = addTrafficLight(sLightPartName1, osg::Vec3(240, +1130, 0), -90, 0.08, pChildren);
+	TrafficLightFacarde* pTrafficLight2 = addTrafficLight(sLightPartName2, osg::Vec3(650, +1190, 0), 180, 0.08, pChildren);
+	TrafficLightFacarde* pTrafficLight3 = addTrafficLight(sLightPartName3, osg::Vec3(710, +760, 0), 90, 0.08, pChildren);
+	TrafficLightFacarde* pTrafficLight4 = addTrafficLight(sLightPartName4, osg::Vec3(290, +710, 0), 0, 0.08, pChildren);
+
+	pSpecialTile->addTrafficLight(pTrafficLight1);
+	pSpecialTile->addTrafficLight(pTrafficLight2);
+	pSpecialTile->addTrafficLight(pTrafficLight3);
+	pSpecialTile->addTrafficLight(pTrafficLight4);
+
+	return pSpecialTile->root();
+}
+
+void buildRoad(osg::Group* pRoadGroup)
+{
+	addRoadTile("roadStraight", "tile1", 0, 0, 0.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile2", 1, 0, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile3", 1, 1, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile5", 0, 2, 0.0f, pRoadGroup);
+
+	addRoadTile("roadXJunction", "tile6", -1, 2, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile7", -1, 1, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile9", -1, 3, -90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile10", -2, 0, 0.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile11", 2, 2, 0.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile12", 1, 3, -90.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile13", 3, 2, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile14", 3, 3, 90.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile15", 3, 4, 180.0f, pRoadGroup);
+
+	addRoadTile("roadTJunction", "tile16", 1, 4, 90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile17", 0, 4, 0.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile18", 2, 4, 0.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile19", -2, 2, 0.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile20", 0, 2, 0.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile21", -3, 2, -90.0f, pRoadGroup);
+
+	addRoadTile("roadStraight", "tile22", -3, 1, 90.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile23", -3, 0, 0.0f, pRoadGroup);
+
+	addRoadTile("roadCurve", "tile24", -1, 4, -90.0f, pRoadGroup);
+
+	osg::Group* pXJunctionLights = new osg::Group();
+	g_pRoot->addChild(pXJunctionLights);
+	buildSpecialXJunction("xNetwork", pRoadGroup, pXJunctionLights);
+
+	osg::Group* pTJunctionLights = new osg::Group();
+	g_pRoot->addChild(pTJunctionLights);
+	buildSpecialTJunction("tNetwork", pRoadGroup, pTJunctionLights);
 }
 
 void createCarOne(osg::Group* pRoadGroup)
@@ -214,14 +236,11 @@ void createCarOne(osg::Group* pRoadGroup)
 	apfs.push_back(raaAnimationPointFinder("tile6", 1, pRoadGroup));
 	apfs.push_back(raaAnimationPointFinder("tile6", 3, pRoadGroup));
 
-
 	ap = createAnimationPath(apfs, pRoadGroup);
 	// NOTE: you will need to extend or develop the car facarde to manage the animmation speed and events
 	raaCarFacarde* pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car0"), ap, 50.0);
 	g_pRoot->addChild(pCar->root());
 }
-
-
 
 int main(int argc, char** argv)
 {
@@ -254,12 +273,11 @@ int main(int argc, char** argv)
 	// Create road
 	buildRoad(pRoadGroup);
 
-	// Create junctions extensions with traffic lights
-	buildSpecialTJunction("tNetwork", g_pRoot);
-	buildSpecialXJunction("xNetwork", g_pRoot);
-	
-	// Add car one
-	//createCarOne(pRoadGroup);
+	for (unsigned int i = 0; i < pRoadGroup->getNumChildren(); ++i)
+	{
+		osg::Node* child = pRoadGroup->getChild(i);
+		std::cout << child->getName() << std::endl;
+	}
 
 	// osg setup stuff
 	osg::GraphicsContext::Traits* pTraits = new osg::GraphicsContext::Traits();
