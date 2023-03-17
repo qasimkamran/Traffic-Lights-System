@@ -80,4 +80,9 @@ void TrafficLightFacarde::setGreenTrafficLight()
 	m_pGreenTrafficLight->getOrCreateStateSet()->setAttribute(m_pGreenTrafficLightOnMaterial, osg::StateAttribute::ON || osg::StateAttribute::OVERRIDE);
 }
 
+void TrafficLightFacarde::resetUpdateCounter()
+{
+	m_iUpdateCounter = 3;
+}
+
 

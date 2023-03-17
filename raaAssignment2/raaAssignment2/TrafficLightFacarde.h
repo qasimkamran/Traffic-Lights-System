@@ -11,9 +11,11 @@ public:TrafficLightFacarde(osg::Node* pPart, osg::Vec3 vTrans, float fRot, float
 	  void initLights(osg::Node* pPart);
 	  void createMaterial(osg::Vec3f vColour, osg::Material* mat);
 	  int m_iTrafficLightStatus;
+	  int m_iUpdateCounter = 3;
 	  void setRedTrafficLight();
 	  void setAmberTrafficLight();
 	  void setGreenTrafficLight();
+	  void resetUpdateCounter();
 
 protected:
 	osg::Geode* m_pRedTrafficLight;

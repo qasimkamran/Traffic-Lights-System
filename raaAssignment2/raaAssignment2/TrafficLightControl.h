@@ -10,6 +10,7 @@ class TrafficLightControl : public raaNodeCallbackFacarde
 public:
 	TrafficLightControl(osg::Node* pPart, osg::Vec3 vTrans, float fRot, float fScale);
 	virtual ~TrafficLightControl();
+	void updateActiveTrafficLight();
 	void operator() (osg::Node* node, osg::NodeVisitor* nv) override;
 	void addTrafficLight(TrafficLightFacarde* pTrafficLight);
 	void changeTrafficLight(TrafficLightFacarde* pTrafficLight);
@@ -17,5 +18,6 @@ public:
 protected:
 	trafficLightList m_lTrafficLights;
 	int timeCount;
+	int activeTrafficLight;
 };
 

@@ -272,13 +272,13 @@ int main(int argc, char** argv)
 
 	// Create road
 	buildRoad(pRoadGroup);
-
+	/*
 	for (unsigned int i = 0; i < pRoadGroup->getNumChildren(); ++i)
 	{
 		osg::Node* child = pRoadGroup->getChild(i);
 		std::cout << child->getName() << std::endl;
 	}
-
+	*/
 	// osg setup stuff
 	osg::GraphicsContext::Traits* pTraits = new osg::GraphicsContext::Traits();
 	pTraits->x = 20;
