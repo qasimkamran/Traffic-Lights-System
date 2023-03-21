@@ -228,12 +228,6 @@ void createCarOne(osg::Group* pRoadGroup)
 	osg::AnimationPath* ap = new osg::AnimationPath();
 
 	apfs.push_back(raaAnimationPointFinder("tile0", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile0", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile7", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile7", 4, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile7", 5, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile6", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tile6", 3, pRoadGroup));
 
 	ap = createAnimationPath(apfs, pRoadGroup);
 	// NOTE: you will need to extend or develop the car facarde to manage the animmation speed and events
@@ -245,7 +239,7 @@ int main(int argc, char** argv)
 {
 	RoadNetworkFileParser fileParser = RoadNetworkFileParser();
 	fileParser.parseRoadTiles("../../roadRelations.txt");
-	fileParser.printRoadTiles();
+	fileParser.parseNetworkTiles("../../networkRelations.txt");
 
 	raaAssetLibrary::start();
 	raaTrafficSystem::start();

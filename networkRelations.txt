@@ -1,37 +1,58 @@
-tNetworkTile
-	j:
-		left turn: 8, 9, 7, g
-		straight turn: 8, 2, a
-	a:
-		right turn: 5, 6, 7, g
-		straight turn: 5, 4, j
-	g:
-		left turn: 0, 1, 2, a
-		right turn: 0, 3, 4, j
+tile: tNetworkTile
+type: T
+child: j
+left: 8, 9, 7, g
+straight: 8, 2, a
+child: a
+right: 5, 6, 7, g
+straight: 5, 4, j
+child: g
+left: 0, 1, 2, a
+right: 0, 3, 4, j
 tile: f
-	g:
-		left turn: 0, 1, 2, s
-		right turn: 0, 3, 4, e
-		straight turn: 0, 10, i
-	s:
-		left turn: 5, 14, 10, i
-		right turn: 5, 6, 7, g
-		straight turn: 5, 4, e
-	e:
-		left turn: 8, 15, 10, i
-		right turn: 8, 9, 7, g
-		straight turn: 8, 2, s
-	i:
-		left turn: 11, 12, 4, e
-		right turn: 11, 13, 2, s
-		straight turn: 11, 7, g
-p
-	q:
-		right turn: 5, 6, 7, l
-		straight turn: 5, 4, r
-	r:
-		left turn: 8, 9, 7, l
-		straight turn: 8, 2, q
-	l:
-		left turn: 0, 1, 2, q
-		right turn: 0, 3, 4, r
+type: X
+child: g
+left: 0, 1, 2, s
+right: 0, 3, 4, e
+straight: 0, 10, i
+child: s
+left: 5, 14, 10, i
+right: 5, 6, 7, g
+straight: 5, 4, e
+child: e
+left: 8, 15, 10, i
+right: 8, 9, 7, g
+straight: 8, 2, s
+child: i
+left: 11, 12, 4, e
+right: 11, 13, 2, s
+straight: 11, 7, g
+tile: p
+type: T
+child: q
+right: 5, 6, 7, l
+straight: 5, 4, r
+child: r
+left: 8, 9, 7, l
+straight: 8, 2, q
+child: l
+left: 0, 1, 2, q
+right: 0, 3, 4, r
+tile: xNetworktile
+type: X
+child: l
+left: 8, 13, 10, e
+right: 8, 9, 7, k
+straight: 8, 2, c
+child: e
+left: 11, 12, 4, l
+right: 11, 15, 2, c
+straight: 11, 7, k
+child: k
+left: 0, 3, 4, l
+right: 0, 1, 2, c
+straight: 0, 10, e
+child: c
+left: 5, 14, 10, e
+right: 5, 6, 7, k
+straight: 5, 4, l

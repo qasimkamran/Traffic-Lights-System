@@ -4,14 +4,21 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <variant>
 #include <unordered_map>
 
 using namespace std;
 
 typedef enum {
 	LEFT,
-	RIGHT
+	RIGHT,
+	STRAIGHT,
 } Lane;
+
+typedef enum {
+	X,
+	T
+} Junction;
 
 typedef struct {
 	Lane lane;
@@ -27,14 +34,16 @@ typedef struct {
 } RoadTile;
 
 typedef struct {
-	string startTileName;
-	Path internalPath;
-} NetworkPath;
+	string name;
+	Path left;
+	Path right;
+	Path straight;
+} NetworkChild;
 
 typedef struct {
 	string name;
-	list<string> connections;
-	list<NetworkPath> paths;
+	Junction type;
+	list<NetworkChild> children;
 } NetworkTile;
 
 class RoadNetworkFileParser
