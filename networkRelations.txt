@@ -1,0 +1,37 @@
+tNetworkTile
+	j:
+		left turn: 8, 9, 7, g
+		straight turn: 8, 2, a
+	a:
+		right turn: 5, 6, 7, g
+		straight turn: 5, 4, j
+	g:
+		left turn: 0, 1, 2, a
+		right turn: 0, 3, 4, j
+tile: f
+	g:
+		left turn: 0, 1, 2, s
+		right turn: 0, 3, 4, e
+		straight turn: 0, 10, i
+	s:
+		left turn: 5, 14, 10, i
+		right turn: 5, 6, 7, g
+		straight turn: 5, 4, e
+	e:
+		left turn: 8, 15, 10, i
+		right turn: 8, 9, 7, g
+		straight turn: 8, 2, s
+	i:
+		left turn: 11, 12, 4, e
+		right turn: 11, 13, 2, s
+		straight turn: 11, 7, g
+p
+	q:
+		right turn: 5, 6, 7, l
+		straight turn: 5, 4, r
+	r:
+		left turn: 8, 9, 7, l
+		straight turn: 8, 2, q
+	l:
+		left turn: 0, 1, 2, q
+		right turn: 0, 3, 4, r

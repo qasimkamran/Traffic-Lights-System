@@ -24,6 +24,7 @@
 #include "raaFinder.h"
 #include "TrafficLightFacarde.h"
 #include "TrafficLightControl.h"
+#include "RoadNetworkFileParser.h"
 #include "raaTrafficSystem.h"
 
 
@@ -170,49 +171,47 @@ osg::Node* buildSpecialXJunction(std::string sIdentifier, osg::Group* pParent, o
 
 void buildRoad(osg::Group* pRoadGroup)
 {
-	addRoadTile("roadStraight", "tile1", 0, 0, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "a", 0, 0, 0.0f, pRoadGroup);
 
-	addRoadTile("roadCurve", "tile2", 1, 0, 90.0f, pRoadGroup);
+	addRoadTile("roadCurve", "b", 1, 0, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile3", 1, 1, 90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "c", 1, 1, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile5", 0, 2, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "e", 0, 2, 0.0f, pRoadGroup);
 
-	addRoadTile("roadXJunction", "tile6", -1, 2, 90.0f, pRoadGroup);
+	addRoadTile("roadXJunction", "f", -1, 2, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile7", -1, 1, 90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "g", -1, 1, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile9", -1, 3, -90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "i", -1, 3, -90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile10", -2, 0, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "j", -2, 0, 0.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile11", 2, 2, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "k", 2, 2, 0.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile12", 1, 3, -90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "l", 1, 3, -90.0f, pRoadGroup);
 
-	addRoadTile("roadCurve", "tile13", 3, 2, 90.0f, pRoadGroup);
+	addRoadTile("roadCurve", "m", 3, 2, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile14", 3, 3, 90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "n", 3, 3, 90.0f, pRoadGroup);
 
-	addRoadTile("roadCurve", "tile15", 3, 4, 180.0f, pRoadGroup);
+	addRoadTile("roadCurve", "o", 3, 4, 180.0f, pRoadGroup);
 
-	addRoadTile("roadTJunction", "tile16", 1, 4, 90.0f, pRoadGroup);
+	addRoadTile("roadTJunction", "p", 1, 4, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile17", 0, 4, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "q", 0, 4, 0.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile18", 2, 4, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "r", 2, 4, 0.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile19", -2, 2, 0.0f, pRoadGroup);
+	addRoadTile("roadStraight", "s", -2, 2, 0.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile20", 0, 2, 0.0f, pRoadGroup);
+	addRoadTile("roadCurve", "t", -3, 2, -90.0f, pRoadGroup);
 
-	addRoadTile("roadCurve", "tile21", -3, 2, -90.0f, pRoadGroup);
+	addRoadTile("roadStraight", "u", -3, 1, 90.0f, pRoadGroup);
 
-	addRoadTile("roadStraight", "tile22", -3, 1, 90.0f, pRoadGroup);
+	addRoadTile("roadCurve", "v", -3, 0, 0.0f, pRoadGroup);
 
-	addRoadTile("roadCurve", "tile23", -3, 0, 0.0f, pRoadGroup);
-
-	addRoadTile("roadCurve", "tile24", -1, 4, -90.0f, pRoadGroup);
+	addRoadTile("roadCurve", "w", -1, 4, -90.0f, pRoadGroup);
 
 	osg::Group* pXJunctionLights = new osg::Group();
 	g_pRoot->addChild(pXJunctionLights);
@@ -244,6 +243,10 @@ void createCarOne(osg::Group* pRoadGroup)
 
 int main(int argc, char** argv)
 {
+	RoadNetworkFileParser fileParser = RoadNetworkFileParser();
+	fileParser.parseRoadTiles("../../roadRelations.txt");
+	fileParser.printRoadTiles();
+
 	raaAssetLibrary::start();
 	raaTrafficSystem::start();
 

@@ -1,0 +1,67 @@
+tile: u
+left: 1, 3, v
+right: 2, 0, t
+tile: v
+left: 0, 1, 2, j
+right: 3, 4, 5, u 
+tile: j
+trafficLight: tNetworkLight3
+left: 2, 0, tNetworktile
+right: 1, 3, v
+tile: g
+trafficLight: tNetworkLight1
+left: 1, 3, tNetworktile
+right: 2, 0, f
+tile: a
+trafficLight: tNetworkLight2
+left: 2, 0, b
+right: 1, 3, tNetworktile
+tile: e
+trafficLight: xNetworkLight1
+left: 2, 0, xNetworktile
+right: 1, 3, f
+tile: i
+left: 1, 3, w
+right: 2, 0, f
+tile: s
+left: 1, 3, t
+right 2, 0, f
+tile: t
+left: 0, 1, 2, u
+right: 3, 4, 5, s
+tile: b
+left: 0, 1, 2, c
+right: 3, 4, 5, a
+tile: c
+left: 2, 0, xNetworktile
+right: 1, 3, b
+tile: w
+left: 3, 4, 5, q
+right: 0, 1, 2, i
+tile: q
+left: 2, 0, p
+right, 1, 3, w
+tile: l
+trafficLight: xNetworkLight2
+left: 1, 3, p
+right: 2, 0, xNetworktile
+tile: k
+trafficLight: xNetworkLight3
+left: 1, 3, xNetworktile
+right: 2, 0, m
+tile: c
+trafficLight: xNetworkLight4
+left: 2, 0, xNetworktile
+right: 1, 3, b
+tile: r
+left: 1, 3, p
+right: 2, 0, o
+tile: o
+left: 0, 1, 2, r
+right: 3, 4, 5, n
+tile: n
+left: 1, 3, m
+right: 2, 0, o
+tile: m
+left: 0, 1, 2, n
+right: 3, 4, 5, k
