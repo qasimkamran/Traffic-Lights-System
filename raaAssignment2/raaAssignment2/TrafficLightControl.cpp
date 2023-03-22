@@ -16,7 +16,6 @@ void TrafficLightControl::updateActiveTrafficLight()
 	activeTrafficLight++;
 	if (activeTrafficLight > m_lTrafficLights.size()-1)
 		activeTrafficLight = 0;
-	printf("%d", activeTrafficLight);
 }
 
 void TrafficLightControl::operator() (osg::Node* node, osg::NodeVisitor* nv)

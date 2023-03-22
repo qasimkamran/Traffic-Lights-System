@@ -227,7 +227,7 @@ void createCarOne(osg::Group* pRoadGroup)
 	raaAnimationPointFinders apfs;
 	osg::AnimationPath* ap = new osg::AnimationPath();
 
-	apfs.push_back(raaAnimationPointFinder("tile0", 1, pRoadGroup));
+	apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
 
 	ap = createAnimationPath(apfs, pRoadGroup);
 	// NOTE: you will need to extend or develop the car facarde to manage the animmation speed and events
@@ -269,13 +269,11 @@ int main(int argc, char** argv)
 
 	// Create road
 	buildRoad(pRoadGroup);
-	/*
-	for (unsigned int i = 0; i < pRoadGroup->getNumChildren(); ++i)
-	{
-		osg::Node* child = pRoadGroup->getChild(i);
-		std::cout << child->getName() << std::endl;
-	}
-	*/
+	
+	
+	// Create car
+	createCarOne(pRoadGroup);
+
 	// osg setup stuff
 	osg::GraphicsContext::Traits* pTraits = new osg::GraphicsContext::Traits();
 	pTraits->x = 20;
