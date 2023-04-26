@@ -85,4 +85,16 @@ void TrafficLightFacarde::resetUpdateCounter()
 	m_iUpdateCounter = 3;
 }
 
+osg::Vec3f TrafficLightFacarde::getWorldDetectionPoint()
+{
+	return this->m_pRoot->getBound().center(); // should return the world position of the detection point for this subtree
+}
 
+osg::Matrix TrafficLightFacarde::getWorldRotationPoint()
+{
+	osg::MatrixTransform* matrixTransform = dynamic_cast<osg::MatrixTransform*>(this->rotation());
+	if (matrixTransform)
+		return matrixTransform->getMatrix();
+	else
+		return osg::Matrix::identity();
+}

@@ -1,14 +1,16 @@
 #include "TrafficLightControl.h"
+#include "raaTrafficSystem.h"
 
 TrafficLightControl::TrafficLightControl(osg::Node* pPart, osg::Vec3 vTrans, float fRot, float fScale) : raaNodeCallbackFacarde(pPart, vTrans, fRot, fScale)
 {
 	timeCount = 0;
 	activeTrafficLight = 0;
+	raaTrafficSystem::addTargetController(this);
 }
 
 TrafficLightControl::~TrafficLightControl()
 {
-
+	raaTrafficSystem::removeTargetController(this);
 }
 
 void TrafficLightControl::updateActiveTrafficLight()
@@ -20,7 +22,7 @@ void TrafficLightControl::updateActiveTrafficLight()
 
 void TrafficLightControl::operator() (osg::Node* node, osg::NodeVisitor* nv)
 {
-	if (timeCount == 200)
+	if (timeCount == 100)
 	{
 		auto it = std::next(m_lTrafficLights.begin(), activeTrafficLight);
 
@@ -51,7 +53,7 @@ void TrafficLightControl::changeTrafficLight(TrafficLightFacarde* pTrafficLight)
 	if (pTrafficLight->m_iTrafficLightStatus == 2)
 	{
 		pTrafficLight->setAmberTrafficLight();
-		timeCount += 50;
+		timeCount -= 50;
 	}
 	if (pTrafficLight->m_iTrafficLightStatus == 3)
 	{

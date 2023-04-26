@@ -46,10 +46,12 @@ typedef struct {
 	list<NetworkChild> children;
 } NetworkTile;
 
+Lane intToLane(int integer);
+
 class RoadNetworkFileParser
 {
 public:
-	RoadNetworkFileParser();
+	RoadNetworkFileParser(string roadTileFilename, string NetworkTileFilename);
 	virtual ~RoadNetworkFileParser();
 	list<RoadTile> parsedRoadTiles;
 	list<NetworkTile> parsedNetworkTiles;

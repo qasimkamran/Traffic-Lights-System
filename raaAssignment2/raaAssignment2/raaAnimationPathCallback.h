@@ -19,6 +19,7 @@ public:
 	
 protected:
 	double m_dSpeed;
+	double m_dDefaultSpeed;
 private:
 	double m_dLastTime;
 	double m_dTimeStep;

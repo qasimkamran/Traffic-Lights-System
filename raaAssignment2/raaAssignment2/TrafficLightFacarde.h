@@ -16,6 +16,8 @@ public:TrafficLightFacarde(osg::Node* pPart, osg::Vec3 vTrans, float fRot, float
 	  void setAmberTrafficLight();
 	  void setGreenTrafficLight();
 	  void resetUpdateCounter();
+	  osg::Vec3f getWorldDetectionPoint();
+	  osg::Matrix getWorldRotationPoint();
 
 protected:
 	osg::Geode* m_pRedTrafficLight;

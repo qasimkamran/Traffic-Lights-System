@@ -158,8 +158,10 @@ bool networkTileIsAcceptable(NetworkTile* networkTile)
 	return true;
 }
 
-RoadNetworkFileParser::RoadNetworkFileParser()
+RoadNetworkFileParser::RoadNetworkFileParser(string roadTileFilename, string NetworkTileFilename)
 {
+	parseRoadTiles(roadTileFilename);
+	parseNetworkTiles(NetworkTileFilename);
 }
 
 RoadNetworkFileParser::~RoadNetworkFileParser()
@@ -318,5 +320,20 @@ void RoadNetworkFileParser::printNetworkTiles()
 		for (auto it_child = (*it_parent).children.begin(); it_child != (*it_parent).children.end(); ++it_child)
 			printf("\nTile: %s \nLeft Connection: %s \nRight Connection: %s \nStraight Connection: %s",
 				  (*it_child).name.c_str(), (*it_child).left.connection.c_str(), (*it_child).right.connection.c_str(), (*it_child).straight.connection.c_str());
+	}
+}
+
+Lane intToLane(int integer)
+{
+	switch (integer)
+	{
+	case 0:
+		return LEFT;
+	case 1:
+		return RIGHT;
+	case 2:
+		return STRAIGHT;
+	default:
+		return LEFT;
 	}
 }
