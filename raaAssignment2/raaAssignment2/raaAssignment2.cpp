@@ -62,7 +62,7 @@ TrafficLightFacarde* addTrafficLight(std::string sPartName, osg::Vec3 vTrans, fl
 osg::Node* buildAnimatedVehicleAsset()
 {
 	osg::Group* pGroup = new osg::Group();
-
+	
 	osg::Geode* pGB = new osg::Geode();
 	osg::ShapeDrawable* pGeomB = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0f, 0.0f, 0.0f), 100.0f, 60.0f, 40.0f));
 	osg::Material* pMat = new osg::Material();
@@ -186,247 +186,154 @@ void buildRoad(osg::Group* pRoadGroup, osg::Group* pTrafficLightsGroup)
 	buildSpecialTJunction("tNetwork", pRoadGroup, pTrafficLightsGroup);
 }
 
-void createCarOne(osg::Group* pRoadGroup)
+raaAnimationPointFinders getFromPathFinders(osg::Group* pRoadGroup, int routeIndex)
 {
 	raaAnimationPointFinders apfs;
-	apfs.push_back(raaAnimationPointFinder("a", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("c", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("c", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("xNetworkTile", 5, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("xNetworkTile", 4, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("l", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("l", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("q", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("q", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("i", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("i", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("f", 11, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("f", 7, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("g", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("g", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("a", 0, pRoadGroup));
 
-	bool destinationReached = true;
-
-	RoadNetworkFileParser fileParser = RoadNetworkFileParser("../../roadRelations.txt", "../../networkRelations.txt");
-
-	Lane currentLane = LEFT;
-	std::string currentTile = "a";
-	std::string nextTile = "b";
-	/*
-	while (destinationReached)
+	switch (routeIndex)
 	{
-		bool isRoadTile = false;
-		auto it_roadTile = fileParser.parsedRoadTiles.begin();
-		while (it_roadTile != fileParser.parsedRoadTiles.end())
+		case 1:
 		{
-			if (!nextTile.compare((*it_roadTile).name))
-			{
-				isRoadTile = true;
-				break;
-			}
-			++it_roadTile;
+			apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("a", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("b", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("b", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("b", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("c", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("c", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 4, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("l", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("l", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 11, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 7, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 2, pRoadGroup));
 		}
-
-		if (isRoadTile)
+		break;
+		case 2:
 		{
-			if (currentLane == LEFT)
-				for (auto it_route = (*it_roadTile).left.route.begin(); it_route != (*it_roadTile).left.route.end(); ++it_route)
-				{
-					apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-					nextTile = (*it_roadTile).left.connection;
-				}
-			else
-				for (auto it_route = (*it_roadTile).right.route.begin(); it_route != (*it_roadTile).right.route.end(); ++it_route)
-				{
-					apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-					nextTile = (*it_roadTile).right.connection;
-				}
+			apfs.push_back(raaAnimationPointFinder("b", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("b", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("b", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("c", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("c", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 4, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("l", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("l", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 11, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 7, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("a", 0, pRoadGroup));
 		}
-
-		bool isNetworkTile = false;
-		auto it_networkTile = fileParser.parsedNetworkTiles.begin();
-		while (it_networkTile != fileParser.parsedNetworkTiles.end())
+		break;
+		case 3:
 		{
-			if (!currentTile.compare((*it_networkTile).name))
-			{
-				isNetworkTile = true;
-				break;
-			}
+			apfs.push_back(raaAnimationPointFinder("r", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("r", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("o", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("o", 4, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("o", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("n", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("n", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("m", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("m", 4, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("m", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("k", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("k", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("xNetworkTile", 10, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("e", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("e", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 8, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("s", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("s", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("t", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("t", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("t", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("u", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("u", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("v", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("v", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("v", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("j", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("j", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 8, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 9, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("tNetworkTile", 7, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("g", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("f", 10, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 1, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("i", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 3, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 4, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("w", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 2, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("q", 0, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 5, pRoadGroup));
+			apfs.push_back(raaAnimationPointFinder("p", 4, pRoadGroup));
 		}
-
-		if (isNetworkTile)
-		{
-			int randomInt = (int)rand() / RAND_MAX * (*it_networkTile).children.size() + 1;
-			Lane randomLane = intToLane(randomInt);
-			for (auto it_children = (*it_networkTile).children.begin(); it_children != (*it_networkTile).children.end(); ++it_children)
-			{
-				if (!currentTile.compare((*it_children).name))
-				{
-					if (randomLane == LEFT)
-						for (auto it_route = (*it_children).left.route.begin(); it_route != (*it_children).left.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).left.connection;
-						}
-					else if (randomLane == RIGHT)
-						for (auto it_route = (*it_children).right.route.begin(); it_route != (*it_children).right.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).right.connection;
-						}
-					else
-						for (auto it_route = (*it_children).straight.route.begin(); it_route != (*it_children).straight.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).straight.connection;
-						}
-				}
-			}
-		}
-
-		if (nextTile == currentTile)
-			destinationReached = false;
+		break;
 	}
-	*/
-	osg::AnimationPath* ap = new osg::AnimationPath();
-	ap = createAnimationPath(apfs, pRoadGroup);
-	raaCarFacarde* pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car0"), ap, 70.0);
-	pRoadGroup->addChild(pCar->root());
+
+	return apfs;
 }
 
-void createCarTwo(osg::Group* pRoadGroup)
+void buildCars(osg::Group* pRoadGroup)
 {
 	raaAnimationPointFinders apfs;
-	apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("a", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("b", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("c", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("c", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("xNetworkTile", 5, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("xNetworkTile", 4, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("l", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("l", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("p", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("q", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("q", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("w", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("i", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("i", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("f", 11, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("f", 7, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("g", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("g", 3, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 0, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 1, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("tNetworkTile", 2, pRoadGroup));
-	apfs.push_back(raaAnimationPointFinder("a", 2, pRoadGroup));
-
-	bool destinationReached = true;
-
+	raaCarFacarde* pCar;
+	osg::AnimationPath* ap = new osg::AnimationPath();
 	RoadNetworkFileParser fileParser = RoadNetworkFileParser("../../roadRelations.txt", "../../networkRelations.txt");
 
-	Lane currentLane = LEFT;
-	std::string currentTile = "a";
-	std::string nextTile = "b";
-	/*
-	while (destinationReached)
-	{
-		bool isRoadTile = false;
-		auto it_roadTile = fileParser.parsedRoadTiles.begin();
-		while (it_roadTile != fileParser.parsedRoadTiles.end())
-		{
-			if (!nextTile.compare((*it_roadTile).name))
-			{
-				isRoadTile = true;
-				break;
-			}
-			++it_roadTile;
-		}
-
-		if (isRoadTile)
-		{
-			if (currentLane == LEFT)
-				for (auto it_route = (*it_roadTile).left.route.begin(); it_route != (*it_roadTile).left.route.end(); ++it_route)
-				{
-					apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-					nextTile = (*it_roadTile).left.connection;
-				}
-			else
-				for (auto it_route = (*it_roadTile).right.route.begin(); it_route != (*it_roadTile).right.route.end(); ++it_route)
-				{
-					apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-					nextTile = (*it_roadTile).right.connection;
-				}
-		}
-
-		bool isNetworkTile = false;
-		auto it_networkTile = fileParser.parsedNetworkTiles.begin();
-		while (it_networkTile != fileParser.parsedNetworkTiles.end())
-		{
-			if (!currentTile.compare((*it_networkTile).name))
-			{
-				isNetworkTile = true;
-				break;
-			}
-		}
-
-		if (isNetworkTile)
-		{
-			int randomInt = (int)rand() / RAND_MAX * (*it_networkTile).children.size() + 1;
-			Lane randomLane = intToLane(randomInt);
-			for (auto it_children = (*it_networkTile).children.begin(); it_children != (*it_networkTile).children.end(); ++it_children)
-			{
-				if (!currentTile.compare((*it_children).name))
-				{
-					if (randomLane == LEFT)
-						for (auto it_route = (*it_children).left.route.begin(); it_route != (*it_children).left.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).left.connection;
-						}
-					else if (randomLane == RIGHT)
-						for (auto it_route = (*it_children).right.route.begin(); it_route != (*it_children).right.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).right.connection;
-						}
-					else
-						for (auto it_route = (*it_children).straight.route.begin(); it_route != (*it_children).straight.route.end(); ++it_route)
-						{
-							apfs.push_back(raaAnimationPointFinder(nextTile, (*it_route), pRoadGroup));
-							nextTile = (*it_children).straight.connection;
-						}
-				}
-			}
-		}
-
-		if (nextTile == currentTile)
-			destinationReached = false;
-	}
-	*/
-	osg::AnimationPath* ap = new osg::AnimationPath();
+	apfs = getFromPathFinders(pRoadGroup, 1);
 	ap = createAnimationPath(apfs, pRoadGroup);
-	raaCarFacarde* pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car1"), ap, 30.0);
+	pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car1"), ap, 40.0);
+
+	pRoadGroup->addChild(pCar->root());
+
+	apfs = getFromPathFinders(pRoadGroup, 2);
+	ap = createAnimationPath(apfs, pRoadGroup);
+	pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car2"), ap, 70.0);
+
+	pRoadGroup->addChild(pCar->root());
+	
+	apfs = getFromPathFinders(pRoadGroup, 3);
+	ap = createAnimationPath(apfs, pRoadGroup);
+	pCar = new raaCarFacarde(g_pRoot, raaAssetLibrary::getNamedAsset("vehicle", "car3"), ap, 80.0);
+
 	pRoadGroup->addChild(pCar->root());
 }
 
@@ -452,7 +359,7 @@ int main(int argc, char** argv)
 	raaAssetLibrary::loadAsset("roadTJunction", g_sDataPath + "roadTJunction.osgb");
 	raaAssetLibrary::loadAsset("roadXJunction", g_sDataPath + "roadXJunction.osgb");
 	raaAssetLibrary::loadAsset("trafficLight", g_sDataPath + "raaTrafficLight.osgb");
-	raaAssetLibrary::insertAsset("vehicle", buildAnimatedVehicleAsset());
+	raaAssetLibrary::loadAsset("vehicle", g_sDataPath + "car-veyron.osgb");
 
 	// add a group node to the scene to hold the road sub-tree
 	osg::Group* pRoadGroup = new osg::Group();
@@ -463,9 +370,8 @@ int main(int argc, char** argv)
 	// Create road
 	buildRoad(pRoadGroup, pTrafficLightsGroup);
 	
-	// Create car
-	createCarOne(pRoadGroup);
-	createCarTwo(pRoadGroup);
+	// Create cars
+	buildCars(pRoadGroup);
 
 	// osg setup stuff
 	osg::GraphicsContext::Traits* pTraits = new osg::GraphicsContext::Traits();

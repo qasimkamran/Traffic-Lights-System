@@ -35,6 +35,10 @@ void TrafficLightControl::operator() (osg::Node* node, osg::NodeVisitor* nv)
 			(*it)->resetUpdateCounter();
 		}
 		timeCount = 0;
+		if ((*it)->m_iTrafficLightStatus == 3)
+			timeCount = -100; // Slower green light
+		if ((*it)->m_iTrafficLightStatus == 2)
+			timeCount = 50; // Quicker yellow light
 	}
 	timeCount++;
 }
@@ -53,7 +57,6 @@ void TrafficLightControl::changeTrafficLight(TrafficLightFacarde* pTrafficLight)
 	if (pTrafficLight->m_iTrafficLightStatus == 2)
 	{
 		pTrafficLight->setAmberTrafficLight();
-		timeCount -= 50;
 	}
 	if (pTrafficLight->m_iTrafficLightStatus == 3)
 	{

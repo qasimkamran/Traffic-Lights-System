@@ -25,9 +25,11 @@ public:
 
 	virtual osg::Vec3f getWorldDetectionPoint(); // from raaCollisionTarget
 	virtual osg::Vec3f getWorldCollisionPoint(); // from raaCollisionTarget
-	osg::Matrix getWorldRotationPoint();
+	osg::MatrixTransform* getWorldRotationPoint();
+	osg::MatrixTransform* getWorldScalePoint();
+	osg::MatrixTransform* getWorldTranslationPoint();
 	void setTileLists(std::list<RoadTile>* parsedRoadTiles, std::list<NetworkTile>* parsedNetworkTiles);
-	bool trafficLightPass = false;
+	bool trafficLightPass = 0;
 
 protected:
 	std::list<RoadTile>* parsedRoadTiles;

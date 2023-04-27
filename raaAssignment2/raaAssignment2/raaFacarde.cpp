@@ -64,6 +64,11 @@ osg::MatrixTransform* raaFacarde::rotation()
 	return m_pRotation;
 }
 
+osg::MatrixTransform * raaFacarde::scale()
+{
+	return m_pScale;
+}
+
 osg::Node* raaFacarde::root()
 {
 	return m_pRoot;

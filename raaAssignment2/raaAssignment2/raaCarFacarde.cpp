@@ -17,7 +17,16 @@
 
 raaCarFacarde::raaCarFacarde(osg::Node* pWorldRoot, osg::Node* pPart, osg::AnimationPath* ap, double dSpeed): raaAnimatedFacarde(pPart, ap, dSpeed)
 {
-	this->m_dDefaultSpeed = this->m_dSpeed;
+	this->m_dDefaultSpeed = this->m_dSpeed; // Original speed to revert to after alterations
+	
+	// Setup car transformations
+	osg::MatrixTransform* rotationMatrixTransform = this->getWorldRotationPoint();
+	rotationMatrixTransform->preMult(osg::Matrix::rotate(osg::PI_2, osg::Vec3(0.0f, 0.0f, 1.0f)));
+	osg::MatrixTransform* scaleMatrixTransform = this->getWorldScalePoint();
+	scaleMatrixTransform->preMult(osg::Matrix::scale(10.0f, 10.0f, 10.0f));
+	osg::MatrixTransform* translationMatrixTransform = this->getWorldTranslationPoint();
+	translationMatrixTransform->postMult(osg::Matrix::translate(osg::Vec3(0.0f, 0.0f, 30.0f)));
+
 	raaTrafficSystem::addTarget(this); // adds the car to the traffic system (static class) which holds a record of all the dynamic parts in the system
 }
 
@@ -34,13 +43,14 @@ void raaCarFacarde::operator()(osg::Node* node, osg::NodeVisitor* nv)
 	double thisY = thisPos[1];
 
 	double finalSpeed = 0;
+	double collisionDetectionSpeed = 0;
 
 	// Collision control between cars
 	for (auto it = raaTrafficSystem::colliders().begin(); it != raaTrafficSystem::colliders().end(); it++)
 	{
 		auto collider = *it;
 
-		if (collider == this) // cannot collide with itself
+		if (collider == this) // Cannot collide with itself
 		{
 			continue;
 		}
@@ -57,14 +67,20 @@ void raaCarFacarde::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		double colliderSpeed = colliderCar->m_dSpeed;
 		double thisSpeed = this->m_dSpeed;
 
-		bool sameDirection = (thisSpeed >= 0 && colliderSpeed >= 0) || (thisSpeed < 0 && colliderSpeed < 0);
+		// Only adjust speed if the colliders are moving in the same direction through this variable
+		bool sameDirection = (-10 < (thisX - colliderX) < 10);
 
-		if (distance < 160 && sameDirection)
-			finalSpeed = colliderSpeed;
+		if (distance < 200 && sameDirection)
+		{
+			collisionDetectionSpeed = colliderSpeed;
+			break;
+		}
 		else
-			finalSpeed = this->m_dDefaultSpeed;
+			collisionDetectionSpeed = this->m_dDefaultSpeed;
 	}
 	
+	finalSpeed = collisionDetectionSpeed;
+
 	// Stopping car at traffic light
 	for (auto it = raaTrafficSystem::controllers().begin(); it != raaTrafficSystem::controllers().end(); it++)
 	{
@@ -81,19 +97,35 @@ void raaCarFacarde::operator()(osg::Node* node, osg::NodeVisitor* nv)
 
 			double distance = hypot(lightX - thisX, lightY - thisY);
 
-			if (distance < 150 && trafficLight->m_iTrafficLightStatus == 1 && this->trafficLightPass == false)
+			/*
+			Traffic Light: have you already passed a traffic light?
+			if condition:
+				Car: No.
+				Traffic Light: Then you wait.
+			else if condition:
+				Car: Yes.
+				Traffic Light: Reset your pass state for the next time you find a signal.
+			*/
+			if (distance < 150 && trafficLight->m_iTrafficLightStatus != 3 && this->trafficLightPass == false)
+			{
 				finalSpeed = 0;
-			else if (distance < 150 && trafficLight->m_iTrafficLightStatus == 1 && this->trafficLightPass == true)
+				break; // Optimisation for loop
+			}
+			else if (distance < 150 && trafficLight->m_iTrafficLightStatus != 3 && this->trafficLightPass == true)
 				this->trafficLightPass = false;
 
-			if (distance < 200 && trafficLight->m_iTrafficLightStatus == 3)
+			// Traffic light pass indicates that it has passed a traffic light
+			if (distance < 150 && trafficLight->m_iTrafficLightStatus == 3)
 			{
 				this->trafficLightPass = true;
-				finalSpeed = this->m_dDefaultSpeed;
+				finalSpeed = collisionDetectionSpeed;
+				if (collisionDetectionSpeed == 0)
+					finalSpeed = this->m_dDefaultSpeed;
+				break; // Optimisation for loop
 			}
 		}
 	}
-	
+
 	this->m_dSpeed = finalSpeed;
 
 	raaAnimationPathCallback::operator()(node, nv);
@@ -109,14 +141,21 @@ osg::Vec3f raaCarFacarde::getWorldCollisionPoint()
 	return osg::Vec3(); // should return the world position of the collision point for this subtree
 }
 
-osg::Matrix raaCarFacarde::getWorldRotationPoint()
+osg::MatrixTransform* raaCarFacarde::getWorldRotationPoint()
 {
-	osg::MatrixTransform* matrixTransform = dynamic_cast<osg::MatrixTransform*>(this->rotation());
-	if (matrixTransform)
-		return matrixTransform->getMatrix();
-	else
-		return osg::Matrix::identity();
+	return this->rotation();
 }
+
+osg::MatrixTransform* raaCarFacarde::getWorldScalePoint()
+{
+	return this->scale();
+}
+
+osg::MatrixTransform* raaCarFacarde::getWorldTranslationPoint()
+{
+	return this->translation();
+}
+
 
 void raaCarFacarde::setTileLists(std::list<RoadTile>* parsedRoadTiles, std::list<NetworkTile>* parsedNetworkTiles)
 {
