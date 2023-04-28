@@ -37,14 +37,19 @@ bool raaInputController::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActi
 			raaSwitchActivator i("IDSwitch", raaAssetLibrary::getAssetsRoot(), m_bShowAssetName = !m_bShowAssetName);
 		}
 			return true;
+		case osgGA::GUIEventAdapter::KEY_BackSpace:
+		{
+			this->pDayNightCallback->updateTimeOffset();
+		}
 		}
 	}
 
 	return false;
 }
 
-raaInputController::raaInputController(osg::Node* pWorldRoot) : m_pWorldRoot(pWorldRoot), m_bShowAnimationPoints(false), m_bShowAnimationNames(false), m_bShowCollisionObjects(false), m_bShowAssetName(false)
+raaInputController::raaInputController(osg::Node* pWorldRoot, DayNightCallback* pDayNightCallback) : m_pWorldRoot(pWorldRoot), m_bShowAnimationPoints(false), m_bShowAnimationNames(false), m_bShowCollisionObjects(false), m_bShowAssetName(false)
 {
+	this->pDayNightCallback = pDayNightCallback;
 }
 
 

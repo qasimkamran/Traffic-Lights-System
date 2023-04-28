@@ -26,6 +26,7 @@
 #include "TrafficLightControl.h"
 #include "RoadNetworkFileParser.h"
 #include "raaTrafficSystem.h"
+#include "DayNightCallback.h"
 
 osg::Group* g_pRoot = 0; // root of the sg
 float g_fTileSize = 472.441f; // width/depth of the standard road tiles
@@ -337,6 +338,33 @@ void buildCars(osg::Group* pRoadGroup)
 	pRoadGroup->addChild(pCar->root());
 }
 
+DayNightCallback* buildLights(osg::Group* pWorldRoot)
+{
+	// Create a new light source
+	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
+
+	// Create a new light and set its properties
+	osg::ref_ptr<osg::Light> light = new osg::Light;
+	light->setLightNum(0); // Light number
+	light->setPosition(osg::Vec4(0.0f, 0.0f, 2000.0f, 1.0f)); // Direction of the light
+	light->setAmbient(osg::Vec4(0.2f, 0.2f, 0.2f, 1.0f)); // Ambient color of the light
+	light->setDiffuse(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Diffuse color of the light
+	light->setSpecular(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Specular color of the light
+
+	// Set the light to be a directional light
+	light->setDirection(osg::Vec3(0.0f, -1.0f, 0.0f)); // Direction of the light
+
+	// Set the light source to use the light
+	lightSource->setLight(light);
+
+	// Add the light source to the scene graph
+	osg::ref_ptr<DayNightCallback> pDayNightCallback = new DayNightCallback(lightSource);
+	pWorldRoot->addChild(lightSource);
+	pWorldRoot->addUpdateCallback(pDayNightCallback);
+
+	return pDayNightCallback;
+}
+
 int main(int argc, char** argv)
 {
 	raaAssetLibrary::start();
@@ -367,6 +395,9 @@ int main(int argc, char** argv)
 	g_pRoot->addChild(pRoadGroup);
 	g_pRoot->addChild(pTrafficLightsGroup);
 
+	// Create lights
+	osg::ref_ptr<DayNightCallback> pDayNightCallback = buildLights(g_pRoot);
+
 	// Create road
 	buildRoad(pRoadGroup, pTrafficLightsGroup);
 	
@@ -394,7 +425,7 @@ int main(int argc, char** argv)
 	pCamera->setViewport(new osg::Viewport(0, 0, pTraits->width, pTraits->height));
 
 	// add own event handler - this currently switches on an off the animation points
-	viewer.addEventHandler(new raaInputController(g_pRoot));
+	viewer.addEventHandler(new raaInputController(g_pRoot, pDayNightCallback));
 
 	// add the state manipulator
 	viewer.addEventHandler(new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()));
